@@ -1,0 +1,19 @@
+{
+  "name": "aetheris",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n api,worker,web -c blue,magenta,green \"pnpm run dev:api\" \"pnpm run dev:worker\" \"pnpm run dev:frontend\"",
+    "dev:api": "cd core && go run ./cmd/api",
+    "dev:worker": "cd core && go run ./cmd/worker",
+    "dev:backend": "concurrently -n api,worker -c blue,magenta \"pnpm run dev:api\" \"pnpm run dev:worker\"",
+    "dev:frontend": "cd web && pnpm run dev --host 127.0.0.1 --port 5178 --strictPort",
+    "test:backend": "cd core && GOCACHE=/private/tmp/aetheris-go-cache go test ./...",
+    "test:frontend": "cd web && pnpm run test:unit -- --run",
+    "build:frontend": "cd web && pnpm run build",
+    "vet:backend": "cd core && GOCACHE=/private/tmp/aetheris-go-cache go vet ./..."
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 397.0379 348.5731">
+  <defs>
+    <linearGradient id="Reisa_Lilac" data-name="Reisa Lilac" x1="0" y1="214.739" x2="216.6351" y2="214.739" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f4effc"/>
+      <stop offset=".1787" stop-color="#ece5f7"/>
+      <stop offset=".475" stop-color="#d7ccec"/>
+      <stop offset=".567" stop-color="#d0c3e8"/>
+      <stop offset=".8652" stop-color="#988ab1"/>
+      <stop offset=".9944" stop-color="#796e8f"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient" x1="78.254" y1="174.2865" x2="397.0379" y2="174.2865" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f4effc"/>
+      <stop offset=".1787" stop-color="#ece5f7"/>
+      <stop offset=".475" stop-color="#d7ccec"/>
+      <stop offset=".567" stop-color="#d0c3e8"/>
+      <stop offset=".8652" stop-color="#988ab1"/>
+      <stop offset=".9944" stop-color="#796e8f"/>
+    </linearGradient>
+  </defs>
+  <path d="M141.3985,85.5716c-38.8568-15.3088-62.0264,11.8342-63.1445,13.1758-.0172.0344-.0344.0517-.0344.0517L6.3888,252.8329c-20.8131,44.6191,11.7653,95.7401,60.9942,95.7401,13.0898,0,25.5777-3.7842,36.1735-10.5441,10.5957-6.7428,19.2993-16.4613,24.8381-28.3127l50.5877-108.4687c7.3104-15.6872,28.7943-16.5472,37.6527-2.5801-10.8193-23.0492-22.8599-48.7989-30.4456-65.3117-6.0031-13.0555-23.4276-39.3728-44.791-47.7841Z" fill="url(#Reisa_Lilac)"/>
+  <path d="M390.6564,252.8329l-86.5376-185.5631C274.5161,3.747,201.9112-14.7955,147.1952,11.6766c-22.5503,10.871-42.0562,29.4136-54.2687,55.5932l-14.6724,31.4776c1.1181-1.3416,24.2876-28.4846,63.1445-13.1758,21.3635,8.4113,38.788,34.7286,44.791,47.7841,7.5856,16.5128,19.6263,42.2625,30.4456,65.3117,9.8045,20.8647,18.5769,39.4933,22.1203,46.9756.9805,2.0813,1.5653,3.3198,1.6513,3.4918v.0171l28.2438,60.5643c11.0602,23.7029,34.849,38.8568,61.0116,38.8568,38.8912,0,67.3758-31.8905,67.3758-67.2898,0-9.4089-2.0125-19.0758-6.3816-28.4503Z" fill="url(#linear-gradient)"/>
+</svg>

@@ -1,0 +1,77 @@
+services:
+  postgres:
+    image: postgres:latest
+    profiles:
+      - postgres
+    environment:
+      POSTGRES_DB: aetheris
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d aetheris"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:latest
+    profiles:
+      - redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build:
+      context: ./core
+      dockerfile: Dockerfile
+    command: ["/app/api"]
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-/app/db/aetheris.db}
+      QUEUE_TYPE: ${QUEUE_TYPE:-db}
+      REDIS_ADDR: ${REDIS_ADDR:-}
+      HTTP_ADDR: :8080
+      QUEUE_NAME: notifications
+      ASYNQ_UNIQUE_TTL: 5m
+    volumes:
+      - sqlite-data:/app/db
+
+  worker:
+    build:
+      context: ./core
+      dockerfile: Dockerfile
+    command: ["/app/worker"]
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-/app/db/aetheris.db}
+      QUEUE_TYPE: ${QUEUE_TYPE:-db}
+      REDIS_ADDR: ${REDIS_ADDR:-}
+      QUEUE_NAME: notifications
+      WORKER_CONCURRENCY: 10
+    volumes:
+      - sqlite-data:/app/db
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+
+volumes:
+  postgres-data:
+  redis-data:
+  sqlite-data:
