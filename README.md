@@ -107,7 +107,7 @@ Enable and configure delivery channels on the Settings page. See the [Aetheris G
 Once channels are configured, sending a notification is a single HTTP POST request:
 
 ```bash
-curl -X POST http://localhost:8080/send \
+curl -X POST http://localhost:3000/api/send \
   -H 'Content-Type: application/json' \
   -d '{
     "recipient": "user@example.com",
@@ -119,7 +119,7 @@ curl -X POST http://localhost:8080/send \
 If a default recipient is configured, the `recipient` field can be omitted:
 
 ```bash
-curl -X POST http://localhost:8080/send \
+curl -X POST http://localhost:3000/api/send \
   -H 'Content-Type: application/json' \
   -d '{
     "channel": "email",
@@ -130,7 +130,7 @@ curl -X POST http://localhost:8080/send \
 If an API Key is configured, add the `X-API-Key` header:
 
 ```bash
-curl -X POST http://localhost:8080/send \
+curl -X POST http://localhost:3000/api/send \
   -H 'Content-Type: application/json' \
   -H 'X-API-Key: your-tenant-api-key' \
   -d '{

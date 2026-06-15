@@ -106,7 +106,7 @@ pnpm dev
 配置送信渠道后，发送通知只需向接口发送一个 HTTP POST 请求：
 
 ```bash
-curl -X POST http://localhost:8080/send \
+curl -X POST http://localhost:3000/api/send \
   -H 'Content-Type: application/json' \
   -d '{
     "recipient": "user@example.com",
@@ -118,7 +118,7 @@ curl -X POST http://localhost:8080/send \
 如果配置了默认收件人，则无需携带 `recipient` 字段：
 
 ```bash
-curl -X POST http://localhost:8080/send \
+curl -X POST http://localhost:3000/api/send \
   -H 'Content-Type: application/json' \
   -d '{
     "channel": "email",
@@ -129,7 +129,7 @@ curl -X POST http://localhost:8080/send \
 如果配置了 API Key，只需添加 `X-API-Key` 请求头：
 
 ```bash
-curl -X POST http://localhost:8080/send \
+curl -X POST http://localhost:3000/api/send \
   -H 'Content-Type: application/json' \
   -H 'X-API-Key: your-tenant-api-key' \
   -d '{
