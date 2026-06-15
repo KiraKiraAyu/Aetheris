@@ -5,8 +5,18 @@ const baseKey = 'aetheris.apiBaseUrl'
 const apiKeyKey = 'aetheris.apiKey'
 const tenantIdKey = 'aetheris.tenantId'
 
+const getInitialBaseUrl = () => {
+  const saved = localStorage.getItem(baseKey)
+  if (!saved) return '/api'
+  if (saved === 'http://localhost:8080' || saved === '/api/v1') {
+    localStorage.setItem(baseKey, '/api')
+    return '/api'
+  }
+  return saved
+}
+
 export const useSettingsStore = defineStore('settings', () => {
-  const apiBaseUrl = ref(localStorage.getItem(baseKey) || 'http://localhost:8080')
+  const apiBaseUrl = ref(getInitialBaseUrl())
   const apiKey = ref(localStorage.getItem(apiKeyKey) || '')
   const tenantId = ref(localStorage.getItem(tenantIdKey) || 'default')
 
@@ -23,7 +33,7 @@ export const useSettingsStore = defineStore('settings', () => {
   }
 
   function save(nextBaseUrl: string, nextApiKey: string, nextTenantId: string) {
-    apiBaseUrl.value = nextBaseUrl.trim().replace(/\/$/, '') || 'http://localhost:8080'
+    apiBaseUrl.value = nextBaseUrl.trim().replace(/\/$/, '') || '/api'
     apiKey.value = nextApiKey.trim()
     tenantId.value = nextTenantId.trim() || 'default'
     localStorage.setItem(baseKey, apiBaseUrl.value)

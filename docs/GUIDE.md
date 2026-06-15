@@ -14,7 +14,7 @@ For multi-tenant API Key authentication, include one of the following headers in
 **Sending an in-app notification:**
 
 ```bash
-curl -X POST http://localhost:8080/send \
+curl -X POST http://localhost:3000/api/send \
   -H 'Authorization: Bearer secret-a' \
   -H 'Content-Type: application/json' \
   -d '{

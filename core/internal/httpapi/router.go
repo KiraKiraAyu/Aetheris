@@ -42,7 +42,7 @@ func RegisterRoutes(router gin.IRouter, service NotificationService) {
 }
 
 func RegisterRoutesWithOptions(router gin.IRouter, service NotificationService, options Options) {
-	apiGroup := router.Group("")
+	apiGroup := router.Group("/api")
 	if len(options.AllowedOrigins) > 0 {
 		apiGroup.Use(corsMiddleware(options.AllowedOrigins))
 	}

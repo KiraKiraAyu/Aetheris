@@ -8,7 +8,7 @@
   简体中文 | <a href="./README.md">English</a>
 </p>
 
-**Aetheris** 是一个轻量、可扩展且易用的开源聚合通知推送引擎。作为一个统一的通知网关，它默认支持**零外部依赖（SQLite+DBQueue）**的极简部署（极适合个人与中小项目）；同时支持通过 **Redis 与 PostgreSQL** 进行水平扩展以支撑大规模、高并发的企业级业务。一处接入，即可快速打通邮件、短信、站内信及各大办公软件群机器人投递通道。
+**Aetheris** 是一个轻量、可扩展且易用的开源聚合通知推送引擎。作为一个统一的通知网关，它默认支持零外部依赖（SQLite+DBQueue）的极简部署（极适合个人与中小项目）；同时支持通过 Redis 与 PostgreSQL 进行水平扩展以支撑大规模、高并发的企业级业务。一处接入，即可快速打通邮件、短信、站内信及各大办公软件群机器人投递通道。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -52,7 +52,7 @@ docker compose up -d
 启动完成后：
 
 - **管理控制台**：`http://localhost:3000`
-- **API 服务端**：`http://localhost:8080` (或通过 Nginx 代理请求：`http://localhost:3000`)
+- **API 服务端**：`http://localhost:3000/api`
 
 ### 附加服务 (Redis / PostgreSQL)
 

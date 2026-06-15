@@ -52,7 +52,7 @@ By default, this launches a lightweight, zero-dependency application with SQLite
 Once started:
 
 - **Management Console**: `http://localhost:3000`
-- **API Server**: `http://localhost:8080` (or via Nginx proxy: `http://localhost:3000`)
+- **API Server**: `http://localhost:3000/api`
 
 ### Optional Services (Redis / PostgreSQL)
 

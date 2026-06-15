@@ -43,7 +43,7 @@ async function testConnection() {
   const originalKey = settings.apiKey;
   const originalTenant = settings.tenantId;
 
-  settings.apiBaseUrl = baseUrl.value.trim().replace(/\/$/, "") || "http://localhost:8080";
+  settings.apiBaseUrl = baseUrl.value.trim().replace(/\/$/, "") || "/api";
   settings.apiKey = apiKey.value.trim();
   settings.tenantId = tenantId.value.trim() || "default";
 
@@ -105,7 +105,7 @@ async function testConnection() {
           ></span>
           <InputText
             v-model="baseUrl"
-            placeholder="http://localhost:8080"
+            placeholder="/api"
             class="pr-9 h-11 border-surface-200 dark:border-surface-800 bg-surface-50/50 dark:bg-surface-950/50 rounded-xl w-full text-sm"
           />
         </div>

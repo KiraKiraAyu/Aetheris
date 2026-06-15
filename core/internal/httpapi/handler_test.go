@@ -46,7 +46,7 @@ func TestCreateNotificationRouteReturnsAcceptedNotification(t *testing.T) {
 		"group_key": "billing:user-1",
 		"metadata": {"invoice_id": "inv_123"}
 	}`)
-	req := httptest.NewRequest(http.MethodPost, "/send", body)
+	req := httptest.NewRequest(http.MethodPost, "/api/send", body)
 	req.Header.Set("Content-Type", "application/json")
 	rec := httptest.NewRecorder()
 
@@ -73,7 +73,7 @@ func TestCreateNotificationRouteMapsValidationErrors(t *testing.T) {
 	router := gin.New()
 	RegisterRoutes(router, service)
 
-	req := httptest.NewRequest(http.MethodPost, "/send", bytes.NewBufferString(`{"tenant_id": ""}`))
+	req := httptest.NewRequest(http.MethodPost, "/api/send", bytes.NewBufferString(`{"tenant_id": ""}`))
 	req.Header.Set("Content-Type", "application/json")
 	rec := httptest.NewRecorder()
 
@@ -93,7 +93,7 @@ func TestCreateNotificationRouteRejectsMalformedJSON(t *testing.T) {
 	router := gin.New()
 	RegisterRoutes(router, service)
 
-	req := httptest.NewRequest(http.MethodPost, "/send", bytes.NewBufferString(`{`))
+	req := httptest.NewRequest(http.MethodPost, "/api/send", bytes.NewBufferString(`{`))
 	req.Header.Set("Content-Type", "application/json")
 	rec := httptest.NewRecorder()
 
@@ -117,7 +117,7 @@ func TestAuthenticatedCreateNotificationUsesTenantFromAPIKey(t *testing.T) {
 		Authenticator: NewStaticAPIKeyAuthenticator(map[string]string{"secret-a": "tenant-a"}),
 	})
 
-	req := httptest.NewRequest(http.MethodPost, "/send", bytes.NewBufferString(`{
+	req := httptest.NewRequest(http.MethodPost, "/api/send", bytes.NewBufferString(`{
 		"recipient": "user-1",
 		"channel": "in_app",
 		"title": "Hello",
@@ -145,7 +145,7 @@ func TestAuthenticatedCreateNotificationRejectsMissingOrMismatchedTenant(t *test
 		Authenticator: NewStaticAPIKeyAuthenticator(map[string]string{"secret-a": "tenant-a"}),
 	})
 
-	req := httptest.NewRequest(http.MethodPost, "/send", bytes.NewBufferString(`{}`))
+	req := httptest.NewRequest(http.MethodPost, "/api/send", bytes.NewBufferString(`{}`))
 	req.Header.Set("Content-Type", "application/json")
 	rec := httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
@@ -153,7 +153,7 @@ func TestAuthenticatedCreateNotificationRejectsMissingOrMismatchedTenant(t *test
 		t.Fatalf("missing auth status = %d, want %d", rec.Code, http.StatusUnauthorized)
 	}
 
-	req = httptest.NewRequest(http.MethodPost, "/send", bytes.NewBufferString(`{
+	req = httptest.NewRequest(http.MethodPost, "/api/send", bytes.NewBufferString(`{
 		"tenant_id": "tenant-b",
 		"recipient": "user-1",
 		"channel": "in_app",
@@ -187,7 +187,7 @@ func TestQueryRoutesAreTenantScoped(t *testing.T) {
 		Authenticator: NewStaticAPIKeyAuthenticator(map[string]string{"secret-a": "tenant-a"}),
 	})
 
-	req := httptest.NewRequest(http.MethodGet, "/notifications?recipient=user-1&limit=10", nil)
+	req := httptest.NewRequest(http.MethodGet, "/api/notifications?recipient=user-1&limit=10", nil)
 	req.Header.Set("Authorization", "Bearer secret-a")
 	rec := httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
@@ -198,7 +198,7 @@ func TestQueryRoutesAreTenantScoped(t *testing.T) {
 		t.Fatalf("notification query = %#v", service.query)
 	}
 
-	req = httptest.NewRequest(http.MethodGet, "/in-app/messages?user_id=user-1&unread=true", nil)
+	req = httptest.NewRequest(http.MethodGet, "/api/in-app/messages?user_id=user-1&unread=true", nil)
 	req.Header.Set("Authorization", "Bearer secret-a")
 	rec = httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
@@ -209,7 +209,7 @@ func TestQueryRoutesAreTenantScoped(t *testing.T) {
 		t.Fatalf("inbox query = %#v", service.inboxQuery)
 	}
 
-	req = httptest.NewRequest(http.MethodPost, "/in-app/messages/msg_1/read?user_id=user-1", nil)
+	req = httptest.NewRequest(http.MethodPost, "/api/in-app/messages/msg_1/read?user_id=user-1", nil)
 	req.Header.Set("Authorization", "Bearer secret-a")
 	rec = httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
@@ -243,7 +243,7 @@ func TestManagementRoutesExposeDetailsAttemptsAndTemplates(t *testing.T) {
 		Authenticator: NewStaticAPIKeyAuthenticator(map[string]string{"secret-a": "tenant-a"}),
 	})
 
-	req := httptest.NewRequest(http.MethodGet, "/notifications/notif_1", nil)
+	req := httptest.NewRequest(http.MethodGet, "/api/notifications/notif_1", nil)
 	req.Header.Set("X-API-Key", "secret-a")
 	rec := httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
@@ -254,7 +254,7 @@ func TestManagementRoutesExposeDetailsAttemptsAndTemplates(t *testing.T) {
 		t.Fatalf("detail args = tenant:%q id:%q", service.detailTenantID, service.detailID)
 	}
 
-	req = httptest.NewRequest(http.MethodGet, "/notifications/notif_1/attempts", nil)
+	req = httptest.NewRequest(http.MethodGet, "/api/notifications/notif_1/attempts", nil)
 	req.Header.Set("X-API-Key", "secret-a")
 	rec = httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
@@ -265,7 +265,7 @@ func TestManagementRoutesExposeDetailsAttemptsAndTemplates(t *testing.T) {
 		t.Fatalf("attempt args = tenant:%q notification:%q", service.attemptTenantID, service.attemptNotificationID)
 	}
 
-	req = httptest.NewRequest(http.MethodGet, "/templates?channel=in_app", nil)
+	req = httptest.NewRequest(http.MethodGet, "/api/templates?channel=in_app", nil)
 	req.Header.Set("X-API-Key", "secret-a")
 	rec = httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
@@ -276,7 +276,7 @@ func TestManagementRoutesExposeDetailsAttemptsAndTemplates(t *testing.T) {
 		t.Fatalf("template query = %#v", service.templateQuery)
 	}
 
-	req = httptest.NewRequest(http.MethodPost, "/templates", bytes.NewBufferString(`{
+	req = httptest.NewRequest(http.MethodPost, "/api/templates", bytes.NewBufferString(`{
 		"key": "digest",
 		"channel": "email",
 		"title_template": "Digest",
@@ -293,7 +293,7 @@ func TestManagementRoutesExposeDetailsAttemptsAndTemplates(t *testing.T) {
 		t.Fatalf("created template = %#v", service.template)
 	}
 
-	req = httptest.NewRequest(http.MethodDelete, "/templates/tpl_1", nil)
+	req = httptest.NewRequest(http.MethodDelete, "/api/templates/tpl_1", nil)
 	req.Header.Set("X-API-Key", "secret-a")
 	rec = httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
@@ -313,7 +313,7 @@ func TestRateLimitMiddlewareReturnsTooManyRequests(t *testing.T) {
 		RateLimiter:   fakeRateLimiter{allowed: false},
 	})
 
-	req := httptest.NewRequest(http.MethodGet, "/notifications", nil)
+	req := httptest.NewRequest(http.MethodGet, "/api/notifications", nil)
 	req.Header.Set("Authorization", "Bearer secret-a")
 	rec := httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
@@ -331,7 +331,7 @@ func TestCORSMiddlewareHandlesPreflightBeforeAuth(t *testing.T) {
 		Authenticator:  NewStaticAPIKeyAuthenticator(map[string]string{"secret-a": "tenant-a"}),
 	})
 
-	req := httptest.NewRequest(http.MethodOptions, "/notifications", nil)
+	req := httptest.NewRequest(http.MethodOptions, "/api/notifications", nil)
 	req.Header.Set("Origin", "http://127.0.0.1:5178")
 	req.Header.Set("Access-Control-Request-Method", http.MethodPost)
 	req.Header.Set("Access-Control-Request-Headers", "authorization,content-type")
@@ -354,14 +354,14 @@ func TestRoutesMapServiceErrorsAndBodyLimit(t *testing.T) {
 	router := gin.New()
 	RegisterRoutesWithOptions(router, &fakeNotificationService{err: notification.ErrNotFound}, Options{MaxBodyBytes: 8})
 
-	req := httptest.NewRequest(http.MethodGet, "/notifications?tenant_id=tenant-a", nil)
+	req := httptest.NewRequest(http.MethodGet, "/api/notifications?tenant_id=tenant-a", nil)
 	rec := httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
 	if rec.Code != http.StatusNotFound {
 		t.Fatalf("not found status = %d, want %d", rec.Code, http.StatusNotFound)
 	}
 
-	req = httptest.NewRequest(http.MethodPost, "/send", bytes.NewBufferString(`{"tenant_id":"tenant-a"}`))
+	req = httptest.NewRequest(http.MethodPost, "/api/send", bytes.NewBufferString(`{"tenant_id":"tenant-a"}`))
 	req.Header.Set("Content-Type", "application/json")
 	rec = httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
@@ -497,7 +497,7 @@ func TestChannelConfigRoutes(t *testing.T) {
 	})
 
 	// GET /channels
-	req := httptest.NewRequest(http.MethodGet, "/channels", nil)
+	req := httptest.NewRequest(http.MethodGet, "/api/channels", nil)
 	req.Header.Set("X-API-Key", "secret-a")
 	rec := httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
@@ -521,7 +521,7 @@ func TestChannelConfigRoutes(t *testing.T) {
 		"enabled": true,
 		"config": "{\"host\":\"smtp.gmail.com\"}"
 	}`)
-	req = httptest.NewRequest(http.MethodPost, "/channels", body)
+	req = httptest.NewRequest(http.MethodPost, "/api/channels", body)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-API-Key", "secret-a")
 	rec = httptest.NewRecorder()
