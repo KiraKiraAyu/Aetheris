@@ -1,4 +1,5 @@
 import { useSettingsStore } from '@/stores/settings'
+import { useI18nStore } from '@/stores/i18n'
 import type {
   Channel,
   CreateNotificationPayload,
@@ -188,9 +189,20 @@ export const api = {
   },
 }
 
-export function formatDate(value?: string) {
+export function formatDate(value?: string, locale?: string) {
   if (!value) return '-'
-  return new Intl.DateTimeFormat(undefined, {
+  
+  let activeLocale = locale
+  if (!activeLocale) {
+    try {
+      const i18n = useI18nStore()
+      activeLocale = i18n.locale
+    } catch {
+      // Safe fallback if called outside Pinia active context
+    }
+  }
+
+  return new Intl.DateTimeFormat(activeLocale || undefined, {
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(new Date(value))

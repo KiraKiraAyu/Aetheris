@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { getAssetUrl } from '../lib/api'
+import { getAssetUrl, formatDate } from '../lib/api'
+
 
 describe('getAssetUrl helper', () => {
   beforeEach(() => {
@@ -48,3 +49,20 @@ describe('getAssetUrl helper', () => {
     expect(getAssetUrl('/icon.svg')).toBe('/demo/aetheris/icon.svg')
   })
 })
+
+describe('formatDate helper', () => {
+  it('formats date using the explicitly passed locale', () => {
+    const testDate = '2026-06-18T02:00:00Z'
+    const formattedEn = formatDate(testDate, 'en')
+    const formattedZh = formatDate(testDate, 'zh')
+    
+    expect(formattedEn).toContain('Jun 18, 2026')
+    expect(formattedZh).toContain('2026年6月18日')
+  })
+
+  it('safely handles empty value', () => {
+    expect(formatDate(undefined)).toBe('-')
+    expect(formatDate('')).toBe('-')
+  })
+})
+
