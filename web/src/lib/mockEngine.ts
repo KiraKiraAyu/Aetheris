@@ -725,10 +725,18 @@ function setStorageItem<T>(key: string, value: T): void {
   localStorage.setItem(key, JSON.stringify(value))
 }
 
+function shiftDate(dateStr: string, diffMonths: number): string {
+  if (!dateStr) return dateStr
+  const d = new Date(dateStr)
+  if (isNaN(d.getTime())) return dateStr
+  d.setMonth(d.getMonth() + diffMonths)
+  return d.toISOString()
+}
+
 // Global initialization
 export function initMockDb() {
   const versionKey = 'aetheris.mock.version'
-  const currentVersion = '3' // Incremented version to force seed update
+  const currentVersion = '4' // Incremented version to force seed update and dynamic date shifts
   const savedVersion = localStorage.getItem(versionKey)
 
   if (savedVersion !== currentVersion) {
@@ -740,6 +748,10 @@ export function initMockDb() {
     localStorage.setItem(versionKey, currentVersion)
   }
 
+  // Calculate difference in months between June 2026 (mock reference month) and current local time
+  const now = new Date()
+  const diffMonths = (now.getFullYear() - 2026) * 12 + (now.getMonth() - 5)
+
   if (!localStorage.getItem(KEYS.configs)) {
     setStorageItem(KEYS.configs, DEFAULT_CONFIGS)
   }
@@ -747,13 +759,29 @@ export function initMockDb() {
     setStorageItem(KEYS.templates, DEFAULT_TEMPLATES)
   }
   if (!localStorage.getItem(KEYS.notifications)) {
-    setStorageItem(KEYS.notifications, DEFAULT_NOTIFICATIONS)
+    const shifted = DEFAULT_NOTIFICATIONS.map((n) => ({
+      ...n,
+      created_at: shiftDate(n.created_at, diffMonths),
+      updated_at: shiftDate(n.updated_at, diffMonths),
+      delivered_at: n.delivered_at ? shiftDate(n.delivered_at, diffMonths) : undefined,
+    }))
+    setStorageItem(KEYS.notifications, shifted)
   }
   if (!localStorage.getItem(KEYS.attempts)) {
-    setStorageItem(KEYS.attempts, DEFAULT_ATTEMPTS)
+    const shifted = DEFAULT_ATTEMPTS.map((a) => ({
+      ...a,
+      started_at: shiftDate(a.started_at, diffMonths),
+      finished_at: a.finished_at ? shiftDate(a.finished_at, diffMonths) : undefined,
+    }))
+    setStorageItem(KEYS.attempts, shifted)
   }
   if (!localStorage.getItem(KEYS.inbox)) {
-    setStorageItem(KEYS.inbox, DEFAULT_INBOX)
+    const shifted = DEFAULT_INBOX.map((i) => ({
+      ...i,
+      created_at: shiftDate(i.created_at, diffMonths),
+      read_at: i.read_at ? shiftDate(i.read_at, diffMonths) : undefined,
+    }))
+    setStorageItem(KEYS.inbox, shifted)
   }
 }
 

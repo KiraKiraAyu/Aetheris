@@ -71,7 +71,8 @@ const statusCards = computed(() => {
 // Chart.js Configuration
 const chartData = computed(() => {
   const months = Array.from({ length: 12 }, (_, i) => {
-    const d = new Date(2000, i, 1);
+    const d = new Date();
+    d.setMonth(d.getMonth() - 11 + i);
     return d.toLocaleDateString(i18n.locale, { month: "short" });
   });
   const deliveredData = Array.from({ length: 12 }, () => 0);
@@ -81,14 +82,20 @@ const chartData = computed(() => {
   const isDark = document.documentElement.classList.contains("dark");
   const deliveredColor = isDark ? "oklch(0.72 0.16 150)" : "oklch(0.65 0.16 150)";
 
+  const now = new Date();
+  const startMonth = new Date(now.getFullYear(), now.getMonth() - 11, 1);
+
   notifications.value.forEach((item) => {
     const date = new Date(item.created_at);
-    const monthIndex = date.getMonth();
-    if (monthIndex < 0 || monthIndex >= deliveredData.length) return;
-    if (item.status === "delivered")
-      deliveredData[monthIndex] = (deliveredData[monthIndex] ?? 0) + 1;
-    else if (item.status === "queued") queuedData[monthIndex] = (queuedData[monthIndex] ?? 0) + 1;
-    else if (item.status === "failed") failedData[monthIndex] = (failedData[monthIndex] ?? 0) + 1;
+    const diffMonths = (date.getFullYear() - startMonth.getFullYear()) * 12 + (date.getMonth() - startMonth.getMonth());
+    if (diffMonths >= 0 && diffMonths < 12) {
+      if (item.status === "delivered")
+        deliveredData[diffMonths] = (deliveredData[diffMonths] ?? 0) + 1;
+      else if (item.status === "queued")
+        queuedData[diffMonths] = (queuedData[diffMonths] ?? 0) + 1;
+      else if (item.status === "failed")
+        failedData[diffMonths] = (failedData[diffMonths] ?? 0) + 1;
+    }
   });
 
   return {
