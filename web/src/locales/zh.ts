@@ -9,6 +9,7 @@ const zh: TranslationSchema = {
     settings: "系统设置",
     offline: "离线",
     toggle_theme: "切换主题",
+    demo: "演示沙箱",
   },
   overview: {
     title: "仪表盘",
@@ -338,6 +339,11 @@ const zh: TranslationSchema = {
     recipient_default_label: "接收目标",
     recipient_default_placeholder: "邮箱、电话、webhook URL、chat_id",
     recipient_default_help: "请根据您的渠道设置提供对应的接收地址。",
+  },
+  demo: {
+    banner: "演示沙箱模式：当前系统运行于纯前端模拟环境，所有操作（发送通知、创建模板、管理通道等）都将使用本地 localStorage 模拟，无需部署后端服务。",
+    clear_logs_btn: "清空模拟数据库",
+    clear_logs_success: "本地模拟数据库已清空成功。",
   },
 };
 

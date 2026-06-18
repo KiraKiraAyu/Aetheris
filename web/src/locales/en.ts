@@ -7,6 +7,7 @@ const en = {
     settings: "Settings",
     offline: "Offline",
     toggle_theme: "Toggle Theme",
+    demo: "Demo Sandbox",
   },
   overview: {
     title: "Overview",
@@ -341,6 +342,11 @@ const en = {
     recipient_default_placeholder: "Email, phone, webhook URL, chat_id",
     recipient_default_help:
       "Provide the address routing targets according to your channel setting.",
+  },
+  demo: {
+    banner: "Demo Sandbox Mode: The system is running in a client-only mock environment. All operations (sending notifications, creating templates, etc.) are simulated using localStorage without a backend.",
+    clear_logs_btn: "Clear Logs DB",
+    clear_logs_success: "Local simulated database cleared successfully.",
   },
 };
 

@@ -1,4 +1,5 @@
 import { useSettingsStore } from '@/stores/settings'
+import { useI18nStore } from '@/stores/i18n'
 import type {
   Channel,
   CreateNotificationPayload,
@@ -77,24 +78,38 @@ function query(params: QueryValue) {
   return text ? `?${text}` : ''
 }
 
+import { mockEngine } from './mockEngine'
+
 export const api = {
-  listNotifications(params: {
+  async listNotifications(params: {
     recipient?: string
     channel?: Channel | ''
     status?: NotificationStatus | ''
     limit?: number
   }) {
+    if (import.meta.env.MODE === 'demo') {
+      return mockEngine.listNotifications(params)
+    }
     return request<NotificationRecord[]>(`/notifications${query(params)}`)
   },
-  getNotification(id: string) {
+  async getNotification(id: string) {
+    if (import.meta.env.MODE === 'demo') {
+      return mockEngine.getNotification(id)
+    }
     return request<NotificationRecord>(`/notifications/${encodeURIComponent(id)}`)
   },
-  listAttempts(notificationId: string) {
+  async listAttempts(notificationId: string) {
+    if (import.meta.env.MODE === 'demo') {
+      return mockEngine.listAttempts(notificationId)
+    }
     return request<DeliveryAttempt[]>(
       `/notifications/${encodeURIComponent(notificationId)}/attempts`,
     )
   },
-  createNotification(payload: CreateNotificationPayload) {
+  async createNotification(payload: CreateNotificationPayload) {
+    if (import.meta.env.MODE === 'demo') {
+      return mockEngine.createNotification(payload)
+    }
     const settings = useSettingsStore()
     return request<NotificationRecord>('/send', {
       method: 'POST',
@@ -104,10 +119,16 @@ export const api = {
       }),
     })
   },
-  listInApp(params: { user_id?: string; unread?: boolean; limit?: number }) {
+  async listInApp(params: { user_id?: string; unread?: boolean; limit?: number }) {
+    if (import.meta.env.MODE === 'demo') {
+      return mockEngine.listInApp(params)
+    }
     return request<InAppMessage[]>(`/in-app/messages${query(params)}`)
   },
-  markInAppRead(id: string, userId: string) {
+  async markInAppRead(id: string, userId: string) {
+    if (import.meta.env.MODE === 'demo') {
+      return mockEngine.markInAppRead(id, userId)
+    }
     return request<void>(
       `/in-app/messages/${encodeURIComponent(id)}/read${query({ user_id: userId })}`,
       {
@@ -115,10 +136,16 @@ export const api = {
       },
     )
   },
-  listTemplates(params: { channel?: Channel | ''; key?: string; limit?: number }) {
+  async listTemplates(params: { channel?: Channel | ''; key?: string; limit?: number }) {
+    if (import.meta.env.MODE === 'demo') {
+      return mockEngine.listTemplates(params)
+    }
     return request<NotificationTemplate[]>(`/templates${query(params)}`)
   },
-  saveTemplate(template: NotificationTemplate) {
+  async saveTemplate(template: NotificationTemplate) {
+    if (import.meta.env.MODE === 'demo') {
+      return mockEngine.saveTemplate(template)
+    }
     const settings = useSettingsStore()
     return request<NotificationTemplate>('/templates', {
       method: 'POST',
@@ -128,15 +155,24 @@ export const api = {
       }),
     })
   },
-  deleteTemplate(id: string) {
+  async deleteTemplate(id: string) {
+    if (import.meta.env.MODE === 'demo') {
+      return mockEngine.deleteTemplate(id)
+    }
     return request<void>(`/templates/${encodeURIComponent(id)}`, {
       method: 'DELETE',
     })
   },
-  listChannelConfigs() {
+  async listChannelConfigs() {
+    if (import.meta.env.MODE === 'demo') {
+      return mockEngine.listChannelConfigs()
+    }
     return request<ChannelConfig[]>('/channels')
   },
-  saveChannelConfig(config: ChannelConfig) {
+  async saveChannelConfig(config: ChannelConfig) {
+    if (import.meta.env.MODE === 'demo') {
+      return mockEngine.saveChannelConfig(config)
+    }
     const settings = useSettingsStore()
     return request<ChannelConfig>('/channels', {
       method: 'POST',
@@ -146,12 +182,46 @@ export const api = {
       }),
     })
   },
+  async clearLogs() {
+    if (import.meta.env.MODE === 'demo') {
+      mockEngine.clearLogs()
+    }
+  },
 }
 
-export function formatDate(value?: string) {
+export function formatDate(value?: string, locale?: string) {
   if (!value) return '-'
-  return new Intl.DateTimeFormat(undefined, {
+  
+  let activeLocale = locale
+  if (!activeLocale) {
+    try {
+      const i18n = useI18nStore()
+      activeLocale = i18n.locale
+    } catch {
+      // Safe fallback if called outside Pinia active context
+    }
+  }
+
+  return new Intl.DateTimeFormat(activeLocale || undefined, {
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(new Date(value))
 }
+
+export function getAssetUrl(path: string): string {
+  const cleanPath = path.startsWith('/') ? path.substring(1) : path
+  if (import.meta.env.MODE === 'demo') {
+    const pathname = window.location.pathname
+    let base = pathname
+    if (pathname.endsWith('.html')) {
+      base = pathname.substring(0, pathname.lastIndexOf('/') + 1)
+    } else if (!pathname.endsWith('/')) {
+      base = pathname + '/'
+    }
+    return `${base}${cleanPath}`
+  }
+  const baseUrl = import.meta.env.BASE_URL
+  const normalizedBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`
+  return `${normalizedBase}${cleanPath}`
+}
+

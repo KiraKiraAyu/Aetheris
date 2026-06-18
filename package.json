@@ -8,6 +8,7 @@
     "dev:worker": "cd core && go run ./cmd/worker",
     "dev:backend": "concurrently -n api,worker -c blue,magenta \"pnpm run dev:api\" \"pnpm run dev:worker\"",
     "dev:frontend": "cd web && pnpm run dev --host 127.0.0.1 --port 5178 --strictPort",
+    "dev:demo": "cd web && pnpm dev:demo --host 127.0.0.1 --port 5179",
     "test:backend": "cd core && GOCACHE=/private/tmp/aetheris-go-cache go test ./...",
     "test:frontend": "cd web && pnpm run test:unit -- --run",
     "build:frontend": "cd web && pnpm run build",

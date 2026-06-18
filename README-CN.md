@@ -1,11 +1,21 @@
-# Aetheris
-
 <p align="center">
   <img src="web/public/icon.svg" alt="Aetheris Logo" width="120" height="120" />
 </p>
 
+<h1 align="center">Aetheris</h1>
+
 <p align="center">
   简体中文 | <a href="./README.md">English</a>
+</p>
+
+<p align="center">
+  <a href="https://ark.lysastriel.com/demo/aetheris" target="_blank">
+    <img src="https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C-Live%20Sandbox-blueviolet?style=for-the-badge" alt="在线体验" />
+  </a>
+</p>
+
+<p align="center">
+  <img src="docs/img/snapshot.png" alt="Aetheris Screenshot" width="800" />
 </p>
 
 **Aetheris** 是一个轻量、可扩展且易用的开源聚合通知推送引擎。作为一个统一的通知网关，它默认支持零外部依赖（SQLite+DBQueue）的极简部署（极适合个人与中小项目）；同时支持通过 Redis 与 PostgreSQL 进行水平扩展以支撑大规模、高并发的企业级业务。一处接入，即可快速打通邮件、短信、站内信及各大办公软件群机器人投递通道。
@@ -106,7 +116,7 @@ pnpm dev
 配置送信渠道后，发送通知只需向接口发送一个 HTTP POST 请求：
 
 ```bash
-curl -X POST http://localhost:8080/send \
+curl -X POST http://localhost:3000/api/send \
   -H 'Content-Type: application/json' \
   -d '{
     "recipient": "user@example.com",
@@ -118,7 +128,7 @@ curl -X POST http://localhost:8080/send \
 如果配置了默认收件人，则无需携带 `recipient` 字段：
 
 ```bash
-curl -X POST http://localhost:8080/send \
+curl -X POST http://localhost:3000/api/send \
   -H 'Content-Type: application/json' \
   -d '{
     "channel": "email",
@@ -129,7 +139,7 @@ curl -X POST http://localhost:8080/send \
 如果配置了 API Key，只需添加 `X-API-Key` 请求头：
 
 ```bash
-curl -X POST http://localhost:8080/send \
+curl -X POST http://localhost:3000/api/send \
   -H 'Content-Type: application/json' \
   -H 'X-API-Key: your-tenant-api-key' \
   -d '{

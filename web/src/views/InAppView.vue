@@ -14,7 +14,7 @@ const messages = ref<InAppMessage[]>([]);
 const loading = ref(false);
 const error = ref("");
 const filters = reactive({
-  user_id: "",
+  user_id: import.meta.env.MODE === "demo" ? "user_998" : "",
   unread: true,
 });
 
