@@ -195,3 +195,21 @@ export function formatDate(value?: string) {
     timeStyle: 'short',
   }).format(new Date(value))
 }
+
+export function getAssetUrl(path: string): string {
+  const cleanPath = path.startsWith('/') ? path.substring(1) : path
+  if (import.meta.env.MODE === 'demo') {
+    const pathname = window.location.pathname
+    let base = pathname
+    if (pathname.endsWith('.html')) {
+      base = pathname.substring(0, pathname.lastIndexOf('/') + 1)
+    } else if (!pathname.endsWith('/')) {
+      base = pathname + '/'
+    }
+    return `${base}${cleanPath}`
+  }
+  const baseUrl = import.meta.env.BASE_URL
+  const normalizedBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`
+  return `${normalizedBase}${cleanPath}`
+}
+

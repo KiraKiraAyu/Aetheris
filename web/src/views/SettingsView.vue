@@ -2,7 +2,7 @@
 import { ref, onMounted, watch } from "vue";
 import { useSettingsStore } from "@/stores/settings";
 import { useI18nStore } from "@/stores/i18n";
-import { api } from "@/lib/api";
+import { api, getAssetUrl } from "@/lib/api";
 import type { ChannelConfig } from "@/lib/types";
 import ApiAccessPanel from "@/components/settings/ApiAccessPanel.vue";
 import ChannelConfigDialog from "@/components/settings/ChannelConfigDialog.vue";
@@ -245,7 +245,7 @@ function getTextColorClass(colorStr: string) {
                       channel.name,
                     )
                   "
-                  :src="`/logos/${channel.name}.svg`"
+                  :src="getAssetUrl(`logos/${channel.name}.svg`)"
                   class="h-8 w-8 object-contain shrink-0"
                   :alt="channel.name"
                 />

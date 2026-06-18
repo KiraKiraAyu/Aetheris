@@ -837,7 +837,7 @@ export const mockEngine = {
         // Replace metadata placeholder variables e.g. {{.recipient}} or {{.code}}
         const metadataMap: Record<string, string> = {
           recipient: payload.recipient,
-          ...(payload.metadata || {}),
+          ...payload.metadata,
         }
 
         Object.entries(metadataMap).forEach(([k, v]) => {

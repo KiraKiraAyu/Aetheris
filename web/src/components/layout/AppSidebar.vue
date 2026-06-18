@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import Button from "primevue/button";
 import { useSettingsStore } from "@/stores/settings";
 import { useI18nStore } from "@/stores/i18n";
+import { getAssetUrl } from "@/lib/api";
 
 defineProps<{ isDark: boolean }>();
 const emit = defineEmits<{ (e: "toggle-theme"): void }>();
@@ -31,7 +32,7 @@ const isDemoMode = import.meta.env.MODE === 'demo';
       class="grid h-12 w-12 place-items-center rounded-xl"
       aria-label="Aetheris"
     >
-      <img src="/icon.svg" class="h-10 w-10 object-contain" alt="Aetheris Logo" />
+      <img :src="getAssetUrl('icon.svg')" class="h-10 w-10 object-contain" alt="Aetheris Logo" />
     </div>
 
     <!-- Demo Mode Badge -->
