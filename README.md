@@ -1,11 +1,21 @@
-# Aetheris
-
 <p align="center">
   <img src="web/public/icon.svg" alt="Aetheris Logo" width="120" height="120" />
 </p>
 
+<h1 align="center">Aetheris</h1>
+
 <p align="center">
   <a href="./README-CN.md">简体中文</a> | English
+</p>
+
+<p align="center">
+  <a href="https://ark.lysastriel.com/demo/aetheris" target="_blank">
+    <img src="https://img.shields.io/badge/Demo-Live%20Sandbox-blueviolet?style=for-the-badge" alt="Live Demo" />
+  </a>
+</p>
+
+<p align="center">
+  <img src="docs/img/snapshot.png" alt="Aetheris Screenshot" width="800" />
 </p>
 
 **Aetheris** is a lightweight, scalable, and easy-to-use open-source aggregated notification delivery engine. Acting as a unified notification gateway, it supports a zero-dependency default startup (using SQLite & DBQueue) for lightweight deployments while seamlessly scaling to high-concurrency enterprise workloads via Redis & PostgreSQL. Connect once, and instantly reach email, SMS, in-app inboxes, and all major workplace chat bots.
