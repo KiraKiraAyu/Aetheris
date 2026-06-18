@@ -19,6 +19,8 @@ const nav = computed(() => [
   { label: i18n.t("nav.templates"), to: "/templates", icon: "pi pi-th-large" },
   { label: i18n.t("nav.settings"), to: "/settings", icon: "pi pi-cog" },
 ]);
+
+const isDemoMode = import.meta.env.MODE === 'demo';
 </script>
 
 <template>
@@ -30,6 +32,15 @@ const nav = computed(() => [
       aria-label="Aetheris"
     >
       <img src="/icon.svg" class="h-10 w-10 object-contain" alt="Aetheris Logo" />
+    </div>
+
+    <!-- Demo Mode Badge -->
+    <div
+      v-if="isDemoMode"
+      class="mt-2 text-[9px] font-black uppercase bg-amber-500/10 dark:bg-amber-500/20 text-amber-500 border border-amber-500/20 px-1.5 py-0.5 rounded-md text-center scale-90 whitespace-nowrap select-none animate-pulse"
+      title="Demo Sandbox Active"
+    >
+      DEMO
     </div>
 
     <nav class="mt-12 grid gap-4">

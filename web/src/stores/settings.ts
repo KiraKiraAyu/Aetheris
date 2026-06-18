@@ -43,6 +43,11 @@ export const useSettingsStore = defineStore('settings', () => {
   }
 
   async function checkConnection() {
+    if (import.meta.env.MODE === 'demo') {
+      connectionStatus.value = 'connected'
+      connectionError.value = ''
+      return
+    }
     connectionStatus.value = 'checking'
     try {
       // 1. Check if the server is reachable and alive via public /healthz
