@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://ark.lysastriel.com/demo/aetheris" target="_blank">
+  <a href="https://ark.lysastriel.com/demos/aetheris" target="_blank">
     <img src="https://img.shields.io/badge/Demo-Live%20Sandbox-blueviolet?style=for-the-badge" alt="Live Demo" />
   </a>
 </p>
